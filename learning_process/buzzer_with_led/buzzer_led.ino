@@ -27,10 +27,8 @@ void bomb() {
     long elapsedTime = currentTime - startTime;
 
     if (elapsedTime <= 45000) { // until 45 seconds
-        remainingTime = 45 - (elapsedTime / 1000);
-        // Calculate delay based on elapsed time to gradually decrease
-        int delayTime = initialDelay - (elapsedTime / 1000);
-        delayTime = constrain(delayTime, 50, initialDelay); // Limit delay to 50-1000ms
+        remainingTime = 45 - (elapsedTime / 1000); // Calculate the remaining time in seconds
+        int delayTime = map(elapsedTime, 0, 45000, 1000, 50);
 
         tone(buzzerPin, 500);  // buzzer on for a constant duration
         delay(150);            // beep duration stays the same
