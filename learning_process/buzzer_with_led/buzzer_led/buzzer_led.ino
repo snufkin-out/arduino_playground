@@ -29,9 +29,11 @@ void bomb() {
     if (elapsedTime <= 45000) { // until 45 seconds
       remainingTime = 45 - (elapsedTime / 1000); // Calculate the remaining time in seconds
       int delayTime = map(elapsedTime, 0, 45000, 1000, 50);  // Maps the elapsed time to a delay range of 1000ms to 100ms
-      tone(buzzerPin, 500);
+      tone(buzzerPin, 600);
+      digitalWrite(ledPin, HIGH);
       delay(150);
       noTone(buzzerPin);
+      digitalWrite(ledPin, LOW);
       delay(delayTime);
     } else {
         remainingTime = 0; // timer finished
@@ -39,10 +41,14 @@ void bomb() {
         // beep 8 times after 45 seconds to simulate "explosion"
         for (int i = 0; i < 8; i++) {
             tone(buzzerPin, 1000);
+            digitalWrite(ledPin, HIGH);
             delay(50);
             noTone(buzzerPin);
+            digitalWrite(ledPin, LOW);
             delay(50);
         }
+
+        delay(6000);
         startTime = millis(); // reset time after "bomb explosion"
     }
 }
