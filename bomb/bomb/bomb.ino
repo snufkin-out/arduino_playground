@@ -55,6 +55,15 @@ void displayText(const char* text) {
   display.display();
 }
 
+void displayCountdown(long secondsLeft) {
+  display.clearDisplay();
+  display.setCursor(0, 0);
+  display.print("Time Left: ");
+  display.print(secondsLeft);
+  display.print("s");
+  display.display();
+}
+
 void beep() {
   tone(buzzerPin, 1000, 100); // Short beep
   delay(100);
@@ -64,9 +73,10 @@ void beep() {
 void handleBomb() {
   long currentTime = millis();
   long elapsedTime = currentTime - startTime;
+  long secondsLeft = (45000 - elapsedTime) / 1000;
 
   if (elapsedTime <= 45000) { // until 45 seconds
-    remainingTime = 45 - (elapsedTime / 1000);
+    displayCountdown(secondsLeft);
     int delayTime = map(elapsedTime, 0, 45000, 1000, 50);
     tone(buzzerPin, 600);
     digitalWrite(ledPin, HIGH);
@@ -84,7 +94,8 @@ void handleBomb() {
       digitalWrite(ledPin, LOW);
       delay(50);
     }
-    delay(6000);
+    displayText("Boom!");
+    delay(2000); // Display "Boom!" for 2 seconds
     startTime = millis(); // reset time after "bomb explosion"
     codeEntered = false;
     bombActive = false;
@@ -106,6 +117,7 @@ void loop() {
       if (enteredCode.length() == correctCode.length()) {
         if (enteredCode == correctCode) {
           displayText("Bomb Activated!");
+          delay(2000); // Display message for 2 seconds
           startTime = millis(); // Start bomb countdown
           bombActive = true;
           enteredCode = ""; // Clear code entry
